@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INDIA-MAX Battle Royale</title>
+<style>
+body{margin:0;background:#0a0e1a;color:white;font-family:Arial;text-align:center}
+h1{color:#ff3c00;font-size:40px;margin-top:30px;text-shadow:0 0 20px #ff3c00}
+#game{width:90%;max-width:400px;height:500px;background:#1a2332;margin:20px auto;border:3px solid #ff3c00;border-radius:15px;position:relative;overflow:hidden}
+#player{width:40px;height:40px;background:#00ff88;position:absolute;bottom:20px;left:50%;border-radius:50%;transform:translateX(-50%)}
+.enemy{width:30px;height:30px;background:red;position:absolute;border-radius:50%}
+button{padding:15px 30px;background:#ff3c00;color:white;border:none;border-radius:10px;font-size:20px;margin:10px}
+#score{font-size:24px;margin:10px}
+</style>
+</head>
+<body>
+<h1>🇮🇳 INDIA-MAX 🇮🇳</h1>
+<div id="score">Score: 0</div>
+<div id="game"><div id="player"></div></div>
+<button onclick="moveLeft()">◀ LEFT</button>
+<button onclick="moveRight()">RIGHT ▶</button>
+<button onclick="startGame()">START GAME</button>
+<script>
+let score=0, gameOn=false, playerPos=50, enemies=[];
+function moveLeft(){if(playerPos>5)playerPos-=10;document.getElementById('player').style.left=playerPos+'%'}
+function moveRight(){if(playerPos<95)playerPos+=10;document.getElementById('player').style.left=playerPos+'%'}
+function startGame(){
+ score=0; gameOn=true; enemies=[];
+ document.getElementById('game').innerHTML='<div id=\"player\"></div>';
+ setInterval(()=>{
+  if(!gameOn)return;
+  let e=document.createElement('div');e.className='enemy';
+  e.style.left=Math.random()*85+'%';e.style.top='0px';
+  document.getElementById('game').appendChild(e);enemies.push(e);
+ },800);
+ setInterval(()=>{
+  if(!gameOn)return;
+  enemies.forEach((en,i)=>{
+   let top=parseInt(en.style.top||0)+5;en.style.top=top+'px';
+   if(top>460){
+    en.remove();enemies.splice(i,1);score++;document.getElementById('score').innerText='Score: '+score;
+   }
+   let pLeft=playerPos; let eLeft=parseInt(en.style.left);
+   if(top>420 && Math.abs(eLeft-pLeft)<8){gameOn=false;alert('Game Over! Score: '+score)}
+  })
+ },50)
+}
+</script>
+</body>
+</html>
